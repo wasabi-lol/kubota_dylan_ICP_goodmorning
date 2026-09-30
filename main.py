@@ -34,6 +34,7 @@ class Game:
         self.playing = True
         self.clock = pg.time.Clock()
     
+    # load data from the level text files, images, files
     def load_data(self, map):
         self.game_dir = path.dirname(__file__)
         self.img_dir = path.join(self.game_dir, "images")
@@ -51,14 +52,18 @@ class Game:
         # self.cactus = Wall(self,7,7)
         # self.enemy = Mob(self,5,5)
 
+        # instantiates entities based on the level map
+        # walls
         for row, tiles in enumerate(self.map.data):
             for col, tile, in enumerate(tiles):
                 if tile == "1":
                     Wall(self, col, row)
+        # mobs
         for row, tiles in enumerate(self.map.data):
             for col, tile, in enumerate(tiles):
                 if tile == "M":
                     Mob(self, col, row)
+        # player
         for row, tiles in enumerate(self.map.data):
             for col, tile, in enumerate(tiles):
                 if tile == "P":
