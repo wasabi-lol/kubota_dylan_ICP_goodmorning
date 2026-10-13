@@ -19,6 +19,17 @@ Process: cursor position, player position, score,
 enemy position, aim in FPS, etc.
 
 Output: graphics - things are drawn, sound - , etc.
+
+GOALS: make money, own vehicles, commit crimes
+
+RULES: can't leave map, somewhat realistic physics
+
+FEEDBACK: when taking damage screen turns red,
+recoil when shooting, money counter
+
+FREEDOM:
+
+
 '''
 
 # set properties, etc. for objects within Game
@@ -67,7 +78,7 @@ class Game:
         for row, tiles in enumerate(self.map.data):
             for col, tile, in enumerate(tiles):
                 if tile == "P":
-                    Player(self, col, row)
+                    self.player = Player(self, col, row)
 
 
     # runs the game
@@ -88,7 +99,7 @@ class Game:
                 self.running = False
     
     def draw_text(self, text, size, color, x, y):
-        font_name = pg.font.match_font("arial")
+        font_name = pg.font.match_font("Baskerville Old Face")
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
