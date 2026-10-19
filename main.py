@@ -59,6 +59,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.all_walls = pg.sprite.Group()
         self.all_mobs = pg.sprite.Group()
+        self.all_coins = pg.sprite.Group()
         # self.player = Player(self,0,0)
         # self.cactus = Wall(self,7,7)
         # self.enemy = Mob(self,5,5)
@@ -74,6 +75,12 @@ class Game:
             for col, tile, in enumerate(tiles):
                 if tile == "M":
                     Mob(self, col, row)
+        
+        # coins
+        for row, tiles in enumerate(self.map.data):
+            for col, tile, in enumerate(tiles):
+                if tile == "C":
+                    Coin(self, col, row)
         # player
         for row, tiles in enumerate(self.map.data):
             for col, tile, in enumerate(tiles):
@@ -117,6 +124,7 @@ class Game:
         self.screen.fill(TAN)
         self.all_sprites.draw(self.screen)
         self.draw_text("Frames per second: " + str(floor(1/self.dt)), 24, WHITE, WIDTH/2, HEIGHT/4)
+        self.draw_text("Coins: " + str(self.player.coins), 24, WHITE, WIDTH/2, HEIGHT/7)
         pg.display.flip()
 
 
