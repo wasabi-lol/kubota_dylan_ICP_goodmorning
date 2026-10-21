@@ -44,13 +44,31 @@ class Game:
         self.running = True
         self.playing = True
         self.clock = pg.time.Clock()
+        self.high_score = 0
+        self.score = 0
     
     # load data from the level text files, images, files
     def load_data(self, map):
         self.game_dir = path.dirname(__file__)
+        self.game_save_file = path.join(self.game_dir, "high_score.txt")
         self.img_dir = path.join(self.game_dir, "images")
         self.snd_dir = path.join(self.game_dir, "audio")
+        self.pickup_snd = pg.mixer.Sound(path.join(self.snd_dir, "coin02.wav"))
         self.map = Map(path.join(self.game_dir, map))
+
+        try:
+            with open(self.game_save_file, "x", encoding="utf-8") as file:
+                file.write("hello world")
+            print("file created successfully!")
+        except FileExistsError:
+            print("file already exists")
+        
+        with open(self.game_save_file, "r") as file:
+            try:
+                self.high_score = int(file.read())
+            except:
+                self.high_score = 0
+                print("high score set to 0")
 
     # makes player
     def new(self):
@@ -101,6 +119,9 @@ class Game:
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                if self.score > self.high_score:
+                    with open(path.join(self.game_dir, self.game_save_file), "w") as f:
+                        f.write(str(self.score))
                 if self.playing:
                     self.playing = False
                 self.running = False
@@ -125,6 +146,8 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.draw_text("Frames per second: " + str(floor(1/self.dt)), 24, WHITE, WIDTH/2, HEIGHT/4)
         self.draw_text("Coins: " + str(self.player.coins), 24, WHITE, WIDTH/2, HEIGHT/7)
+        self.draw_text("Score: " + str(self.score), 24, WHITE, WIDTH/2, HEIGHT/8)
+        self.draw_text("High score: " + str(self.high_score), 24, WHITE, WIDTH/2, HEIGHT/12)
         pg.display.flip()
 
 
