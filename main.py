@@ -47,7 +47,7 @@ class Game:
         self.high_score = 0
         self.score = 0
     
-    # load data from the level text files, images, files
+    # load data from  text files, images, etc.
     def load_data(self, map):
         self.game_dir = path.dirname(__file__)
         self.game_save_file = path.join(self.game_dir, "high_score.txt")
@@ -104,6 +104,8 @@ class Game:
             for col, tile, in enumerate(tiles):
                 if tile == "P":
                     self.player = Player(self, col, row)
+        pg.mixer.music.load(path.join(self.snd_dir, "see_me_again_instrumental.mp3"))
+        pg.mixer.music.play(loops=-1)
 
 
     # runs the game
@@ -115,7 +117,7 @@ class Game:
             self.update()
             self.draw()
 
-    # inputs
+    # inputs and happenings after game is closed
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -126,6 +128,7 @@ class Game:
                     self.playing = False
                 self.running = False
     
+    # function to put text on the screen like score or fps
     def draw_text(self, text, size, color, x, y):
         font_name = pg.font.match_font("Baskerville Old Face")
         font = pg.font.Font(font_name, size)

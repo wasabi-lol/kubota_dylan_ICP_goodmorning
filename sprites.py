@@ -101,6 +101,7 @@ class Player(Sprite):
     def update(self):
         # updates everything, letting you move
         # as well as show animations
+        # updates score
         self.get_keys()
         hits = pg.sprite.spritecollide(self, self.game.all_coins, True)
         if hits:
