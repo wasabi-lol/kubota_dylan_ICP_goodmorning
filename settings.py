@@ -14,6 +14,7 @@ RED = (255, 0, 0)
 PURPLE = (82, 14, 125)
 TAN = (210, 180, 140)
 BLACK = (0, 0, 0)
+YELLOW = (255, 255, 0)
 
 
 # player settings

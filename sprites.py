@@ -3,6 +3,8 @@ from pygame.sprite import Sprite
 from settings import *
 from utils import *
 
+from random import randint
+
 from os import path
 
 # vector for collisions
@@ -104,7 +106,10 @@ class Player(Sprite):
         # updates score
         self.get_keys()
         hits = pg.sprite.spritecollide(self, self.game.all_coins, True)
+        # when the player collides with a coin, send out particles and increase score/coins
         if hits:
+            for i in range(10):
+                Particle(self.game, hits[0].x, hits[0].y)
             self.coins += 1
             self.game.pickup_snd.play()
             self.game.score += 1
@@ -143,6 +148,37 @@ class Wall(Sprite):
         # cycles through images in the spritesheet to animate
         self.idle_frames = [self.spritesheet.get_image(0,TILESIZE*2,TILESIZE,TILESIZE)]
 
+class Particle(Sprite):
+    def __init__(self, game, x, y):
+        # properties of walls
+        # size, position, color/image
+        self.groups = game.all_sprites, game.all_particles
+        Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE/8, TILESIZE/8))
+        self.image.fill(WHITE)
+        # self.spritesheet = Spritesheet(path.join(self.game.img_dir, "sprite_sheet.png"))
+        # self.load_images()
+        # self.image = pg.Surface((TILESIZE, TILESIZE))
+        # self.image = self.spritesheet.get_image(0, TILESIZE*2, TILESIZE, TILESIZE)
+        self.rect = self.image.get_rect()
+        self.vx, self.vy = 0,0
+        self.x = x
+        self.y = y
+        self.speed = 25
+        self.rect.x = self.x
+        self.rect.y = self.y
+        self.countdown = Cooldown(5000)
+        self.countdown.event_time = floor(pg.time.get_ticks()/1000)
+        print(self.rect.x)
+        print(self.rect.y)
+    
+    def update(self):
+        self.countdown.ticking()
+        self.rect.x += self.speed * randint(-5,5)
+        self.rect.y += self.speed * randint(-5,5)
+        if self.countdown.delta > 1.5:
+            self.kill()
 
 
 class Coin(Sprite):

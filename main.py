@@ -47,7 +47,7 @@ class Game:
         self.high_score = 0
         self.score = 0
     
-    # load data from  text files, images, etc.
+    # load data from  text files, images, audio, etc.
     def load_data(self, map):
         self.game_dir = path.dirname(__file__)
         self.game_save_file = path.join(self.game_dir, "high_score.txt")
@@ -56,6 +56,8 @@ class Game:
         self.pickup_snd = pg.mixer.Sound(path.join(self.snd_dir, "coin02.wav"))
         self.map = Map(path.join(self.game_dir, map))
 
+
+        # save high score to a txt file
         try:
             with open(self.game_save_file, "x", encoding="utf-8") as file:
                 file.write("hello world")
@@ -70,7 +72,7 @@ class Game:
                 self.high_score = 0
                 print("high score set to 0")
 
-    # makes player
+    # makes player, walls, mobs, etc.
     def new(self):
         self.load_data("level1.txt")
         # print(self.map.data)
@@ -78,9 +80,8 @@ class Game:
         self.all_walls = pg.sprite.Group()
         self.all_mobs = pg.sprite.Group()
         self.all_coins = pg.sprite.Group()
-        # self.player = Player(self,0,0)
-        # self.cactus = Wall(self,7,7)
-        # self.enemy = Mob(self,5,5)
+        self.all_particles = pg.sprite.Group()
+
 
         # instantiates entities based on the level map
         # walls
@@ -104,6 +105,7 @@ class Game:
             for col, tile, in enumerate(tiles):
                 if tile == "P":
                     self.player = Player(self, col, row)
+        # plays background music
         pg.mixer.music.load(path.join(self.snd_dir, "see_me_again_instrumental.mp3"))
         pg.mixer.music.play(loops=-1)
 
@@ -149,7 +151,7 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.draw_text("Frames per second: " + str(floor(1/self.dt)), 24, WHITE, WIDTH/2, HEIGHT/4)
         self.draw_text("Coins: " + str(self.player.coins), 24, WHITE, WIDTH/2, HEIGHT/7)
-        self.draw_text("Score: " + str(self.score), 24, WHITE, WIDTH/2, HEIGHT/8)
+        self.draw_text("Score: " + str(self.score), 24, WHITE, WIDTH/2, HEIGHT/9)
         self.draw_text("High score: " + str(self.high_score), 24, WHITE, WIDTH/2, HEIGHT/12)
         pg.display.flip()
 
